@@ -1,5 +1,5 @@
 {
-  "name": "desafio17",
+  "name": "desafio20",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "migrate:db": ".\\node_modules\\.bin\\knex migrate:latest --env development",
     "rollback:db": ".\\node_modules\\.bin\\knex migrate:rollback --env development",
     "seed:db": ".\\node_modules\\.bin\\knex seed:run --env development",
-    "iniciar:db":"npm run rollback:db && npm run migrate:db && npm run seed:db",
+    "iniciar:db": "npm run rollback:db && npm run migrate:db && npm run seed:db",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
