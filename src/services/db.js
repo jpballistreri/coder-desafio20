@@ -1,50 +1,55 @@
 import knex from "knex";
 import dbConfig from "../../knexfile";
+import mongoose from "mongoose";
+import * as model from "../models/ecommerce";
 
 class DBProductos {
   constructor() {
-    const environment = process.env.NODE_ENV || "development";
-    console.log(`SETTING ${environment} DB`);
-    const options = dbConfig[environment];
-    this.connection = knex(options);
+    this.URL = "mongodb://172.17.0.3:27017/ecommerce";
   }
 
   init() {
-    console.log("cargando base");
-    this.connection.schema.hasTable("productos").then((exists) => {
-      if (!exists) {
-        console.log("Creamos la tabla productos!");
+    console.log("cargando base mongo");
+    (async () => {
+      try {
+        await mongoose.connect(this.URL);
 
-        this.connection.schema
-          .createTable("productos", (mensajesTable) => {
-            mensajesTable.increments("id");
-            mensajesTable.string("title").notNullable();
-            mensajesTable.integer("price").notNullable();
-            mensajesTable.string("thumbnail").notNullable();
-          })
-          .then(() => {
-            console.log("Done");
-          });
+        console.log("MONGODB CONNECTED.");
+      } catch (e) {
+        console.log("Error: ", e);
       }
-    });
+    })();
   }
 
-  async get(tableName, id) {
-    if (id) return this.connection(tableName).where("id", id);
+  async get(id) {
+    let output = [];
+    try {
+      if (id) {
+        const document = await model.productos.findById(id);
+        if (document) output.push(document);
+      } else {
+        output = await model.productos.find();
+      }
+      return output;
+    } catch (err) {
+      return output;
+    }
+  }
 
-    return this.connection(tableName);
+  async create(product) {
+    const newProduct = new model.productos(product);
+    await newProduct.save();
+    console.log("Producto agregado");
+    return newProduct;
   }
-  async create(tableName, data) {
-    return this.connection(tableName).insert(data);
+  async delete(id) {
+    await model.productos.findByIdAndDelete(id);
   }
-  async delete(tableName, id) {
-    console.log("borrando");
-    return this.connection(tableName).where("id", id).del();
-  }
-  async update(tableName, id, data) {
-    return this.connection(tableName).where("id", id).update(data);
+  async update(id, producto) {
+    return model.productos.findByIdAndUpdate(id, producto);
   }
 }
+
 class DBMensajes {
   constructor() {
     const environment = process.env.NODE_ENV || "development_sqlite3";

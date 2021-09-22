@@ -4,29 +4,30 @@ import { DBService } from "../services/db";
 
 const router = express.Router();
 
-router.get("/productos/listar", async (req, res) => {
-  const items = await DBService.get("productos");
+router.get("/productos/", async (req, res) => {
+  const items = await DBService.get();
   res.json({
     data: items,
   });
 });
-router.get("/productos/listar/:id", async (req, res) => {
+
+router.get("/productos/:id", async (req, res) => {
   const { id } = req.params;
-  const item = await DBService.get("productos", id);
-  if (!item.length)
+
+  const result = await DBService.get(id);
+  if (!result.length)
     return res.status(404).json({
       msgs: "Producto no encontrado!",
     });
 
   res.json({
-    data: item,
+    data: result,
   });
 });
 
-router.post("/productos/guardar", async (req, res) => {
+router.post("/productos/", async (req, res) => {
   const { title, price, thumbnail } = req.body;
   //Validar datos ingresados
-
   if (
     !title ||
     !price ||
@@ -44,31 +45,32 @@ router.post("/productos/guardar", async (req, res) => {
     price,
     thumbnail,
   };
-  const newId = await DBService.create("productos", item);
-  const newProduct = await DBService.get("productos", newId);
+
+  const newProduct = await DBService.create(item);
+  //const newProduct = await DBService.get("productos", newId);
   res.json({
     msj: "Producto agregado.",
     data: newProduct,
   });
 });
 
-router.delete("/productos/eliminar/:id", async (req, res) => {
+router.delete("/productos/:id", async (req, res) => {
   const { id } = req.params;
-  const productoAEliminar = await DBService.get("productos", id);
+  const productoAEliminar = await DBService.get(id);
   if (!productoAEliminar.length) {
     return res.status(400).json({
       msj: "No existe el producto.",
     });
   }
 
-  await DBService.delete("productos", id);
+  await DBService.delete(id);
 
   res.json({
     Producto_eliminado: productoAEliminar,
   });
 });
 
-router.put("/productos/actualizar/:id", async (req, res) => {
+router.put("/productos/:id", async (req, res) => {
   const { id } = req.params;
   const { title, price, thumbnail } = req.body;
   if (
@@ -84,7 +86,7 @@ router.put("/productos/actualizar/:id", async (req, res) => {
     });
   }
 
-  const productoAActualizar = await DBService.get("productos", id);
+  const productoAActualizar = await DBService.get(id);
   if (!productoAActualizar.length) {
     return res.status(400).json({
       msj: "No existe el producto.",
@@ -96,8 +98,9 @@ router.put("/productos/actualizar/:id", async (req, res) => {
     price,
     thumbnail,
   };
-  await DBService.update("productos", id, item);
-  const productoActualizado = await DBService.get("productos", id);
+
+  await DBService.update(id, item);
+  const productoActualizado = await DBService.get(id);
   //console.log(await productoActualizado);
   res.json({
     Producto_actualizado: productoActualizado,

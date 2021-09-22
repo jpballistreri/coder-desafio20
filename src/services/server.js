@@ -8,7 +8,7 @@ import * as http from "http";
 import { initWSServer } from "./socket";
 
 DBService.init();
-DBMensajesSqlite.init();
+//DBMensajesSqlite.init();
 
 /** INICIALIZACION API con EXPRESS */
 const app = express();
