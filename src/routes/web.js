@@ -5,7 +5,8 @@ import { DBService } from "../services/db";
 const router = express.Router();
 
 router.get("/vista", async (req, res) => {
-  const arrayProductos = await DBService.get("productos");
+  const arrayProductos = await DBService.get();
+  console.log(arrayProductos);
 
   res.render("main", arrayProductos);
 });

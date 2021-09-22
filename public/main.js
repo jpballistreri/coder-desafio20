@@ -33,6 +33,7 @@ function renderMensajes(data) {
 }
 
 function renderProductos(data) {
+  console.log("rendereandoooo");
   data.reverse();
 
   let html = data
@@ -72,7 +73,7 @@ function enviarFormulario(e) {
   let thumbnail = document.getElementById("thumbnail").value;
   //let mensaje = document.getElementById("msjIngresoProducto");
 
-  fetch("/api/productos/guardar", {
+  fetch("/api/productos/", {
     method: "POST",
     body: JSON.stringify({ title, price, thumbnail }),
     headers: { "content-type": "application/json" },

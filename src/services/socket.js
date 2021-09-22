@@ -14,7 +14,7 @@ export const initWSServer = (server) => {
 
     socket.on("nuevo-producto", async () => {
       console.log("Nuevo Producto!");
-      const productos = await DBService.get("productos");
+      const productos = await DBService.get();
       io.emit("array-productos", productos);
     });
 
@@ -44,7 +44,7 @@ export const initWSServer = (server) => {
     });
 
     socket.on("get-productos", async () => {
-      const productos = await DBService.get("productos");
+      const productos = await DBService.get();
       socket.emit("array-productos", productos);
     });
 
