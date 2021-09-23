@@ -1,8 +1,15 @@
 import express from "express";
 import fs from "fs";
 import { DBService } from "../services/db";
+import { devolverAleatorios } from "../services/faker";
 
 const router = express.Router();
+
+router.get("/productos/vista-test/", async (req, res) => {
+  res.json({
+    data: devolverAleatorios(),
+  });
+});
 
 router.get("/productos/", async (req, res) => {
   const items = await DBService.get();

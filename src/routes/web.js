@@ -15,4 +15,8 @@ router.get("/ingreso", (req, res) => {
   res.render("ingreso");
 });
 
+router.get("/vista-test", (req, res) => {
+  res.render("vista-test");
+});
+
 export default router;
