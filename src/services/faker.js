@@ -1,14 +1,20 @@
 import faker from "faker";
 
-export const devolverAleatorios = (req, res) => {
-  const respuesta = [];
-
-  for (let i = 0; i < 10; i++) {
-    respuesta.push({
-      title: `${faker.vehicle.manufacturer()} ${faker.vehicle.model()}`,
-      price: faker.commerce.price(),
-      thumbnail: faker.image.avatar(),
-    });
+class FakerClass {
+  constructor() {
+    this.data = [];
   }
-  return respuesta;
-};
+  generar(cantidad) {
+    let respuesta = [];
+
+    for (let i = 0; i < cantidad; i++) {
+      respuesta.push({
+        title: `${faker.vehicle.manufacturer()} ${faker.vehicle.model()}`,
+        price: faker.finance.amount(10, 100000, 2),
+        thumbnail: faker.image.avatar(),
+      });
+    }
+    return respuesta;
+  }
+}
+export const FakerService = new FakerClass();

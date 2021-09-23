@@ -1,6 +1,7 @@
 import express from "express";
 import fs from "fs";
 import { DBService } from "../services/db";
+import { FakerService } from "../services/faker";
 
 const router = express.Router();
 
@@ -16,7 +17,11 @@ router.get("/ingreso", (req, res) => {
 });
 
 router.get("/vista-test", (req, res) => {
-  res.render("vista-test");
+  const cantidad = req.query.cant ? Number(req.query.cant) : 10;
+  const arrayProductos = FakerService.generar(cantidad);
+  console.log(arrayProductos);
+
+  res.render("vista-test", { arrayProductos: arrayProductos });
 });
 
 export default router;
